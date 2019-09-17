@@ -34,7 +34,7 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-      - aws-ecr/build-and-push-image:
+      - aws-ecr/build_and_push_image:
           requires:
             - build
           account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
