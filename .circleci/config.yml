@@ -1,4 +1,7 @@
 version: 2.1
+orbs: 
+  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecs: circleci/aws-ecs@0.0.8
 jobs:
   build:
     working_directory: ~/my-project
@@ -21,23 +24,33 @@ jobs:
       # run unit tests
       # run e2e tests
       # dockerize the project (?)
-  deploy:
-    working_directory: ~/my-project
-    docker:
-      - image: circleci/node:4.8.2
-    steps:
-      - checkout
-      - run: echo "A more familiar hi"
-      - run: sleep 15
+  # deploy:
+  #   working_directory: ~/my-project
+  #   docker:
+  #     - image: circleci/node:4.8.2
+  #   steps:
 workflows:
   # version: 2.1
   build_and_deploy:
     jobs:
       - build
-      # - deploy:
-      #     requires:
-      #       - build
-      #   filters:
-      #     branches:
-      #       only:
-      #         - master
+      - aws-ecr/build_and_push_image:
+          requires:
+            - build
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          repo: "${AWS_ECR_REPO_NAME}"
+          region: ${AWS_REGION}
+          tag: "${CIRCLE_SHA1}"
+      # update an ECS service
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build_and_push_image
+          aws-region: ${AWS_REGION}
+          family: "${AWS_ECR_REPO_NAME}-service"
+          cluster-name: "${AWS_ECR_REPO_NAME}-cluster"
+          container-image-name-updates: "container=${AWS_ECR_REPO_NAME}-service,tag=${CIRCLE_SHA1}"
+          filters:
+            branches:
+                only:
+                  # only run on dev and master branches
+                  - master
