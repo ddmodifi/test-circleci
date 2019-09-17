@@ -1,6 +1,7 @@
 version: 2.1
 jobs:
   build:
+    working_directory: ~/my-project
     docker:
       - image: circleci/node:4.8.2
     steps:
@@ -21,6 +22,7 @@ jobs:
       # run e2e tests
       # dockerize the project (?)
   deploy:
+    working_directory: ~/my-project
     docker:
       - image: circleci/node:4.8.2
     steps:
