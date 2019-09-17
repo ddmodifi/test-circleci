@@ -29,7 +29,7 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - aws-ecr/build_and_push_image:
+      - aws-ecr/build-and-push-image:
           account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
           repo: "${AWS_ECR_REPO_NAME}"
           region: ${AWS_REGION}
