@@ -1,13 +1,26 @@
- version: 2
+ version: 2.1
  jobs:
-   one:
+   build:
      docker:
        - image: circleci/node:4.8.2
      steps:
        - checkout
-       - run: echo "A first hello"
-       - run: sleep 25
-   two:
+      # pull node modules from cache
+      - restore_cache:
+          key: testExpress-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Install local dependencies
+          command: npm install
+      # save node modules to cache if they dont exist
+      - save_cache:
+          key: testExpress-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - "node_modules"
+      # lint source code
+      # run unit tests
+      # run e2e tests
+      # dockerize the project (?)
+   deploy:
      docker:
        - image: circleci/node:4.8.2
      steps:
@@ -15,8 +28,13 @@
        - run: echo "A more familiar hi"
        - run: sleep 15
  workflows:
-   version: 2
-   one_and_two:
+   build_and_deploy:
      jobs:
-       - one
-       - two
+       - build
+       - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
