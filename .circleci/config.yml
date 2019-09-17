@@ -1,4 +1,7 @@
 version: 2.1
+orbs: 
+  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecs: circleci/aws-ecs@0.0.8
 jobs:
   build:
     working_directory: ~/my-project
@@ -34,6 +37,18 @@ workflows:
   build_and_deploy:
     jobs:
       - build
+      - aws-ecr/build_and_push_image:
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+          repo: "${AWS_ECR_REPO_NAME}"
+          region: ${AWS_REGION}
+          tag: "${CIRCLE_SHA1}"
+      # - aws-ecs/deploy-service-update:
+      #     requires:
+      #       - aws-ecr/build_and_push_image
+      #     aws-region: ${AWS_REGION}
+      #     family: "${AWS_RESOURCE_NAME_PREFIX}-service"
+      #     cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+      #     container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
       # - deploy:
       #     requires:
       #       - build
