@@ -45,10 +45,9 @@ workflows:
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build_and_push_image
-          aws-region: ${AWS_REGION}
-          family: "${AWS_ECR_REPO_NAME}-service"
-          cluster-name: "${AWS_ECR_REPO_NAME}-cluster"
-          container-image-name-updates: "container=${AWS_ECR_REPO_NAME}-service,tag=${CIRCLE_SHA1}"
+          family: "${AWS_ECR_REPO_NAME}"
+          cluster-name: "${AWS_ECR_REPO_NAME}"
+          container-image-name-updates: "container=${AWS_ECR_REPO_NAME},tag=${CIRCLE_SHA1}"
           filters:
             branches:
                 only:
