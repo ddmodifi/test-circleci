@@ -21,7 +21,8 @@ const port = 3000
 // }
 
 app.get('/', (req, res) => res.send('Hello World!'))
-app.get('/denise', (req, res) => res.send('DEV DV: ' + process.env.DB_DATABASE_DEV + ', PROD DB: ' +process.env.DB_DATABASE_PROD + ', Hello Denise!'))
+app.get('/denise', (req, res) => res.send('Hello Denise!'))
+app.get('/database', (req, res) => res.send('Database name is: ' + process.env.DB_DATABASE))
 app.get('/teams', (req, res) => res.send('GET teams!'))
 app.get('/kendrick', (req, res) => res.send('GET kendrick!'))
 app.get('/newroute', (req, res) => res.send('JUST ADDED THIS NEW ROUTE!'))
