@@ -7,6 +7,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// comment this out since it will now come from aws
 // const environment = argv.env || 'dev'
 // const file = fs.readFileSync(__dirname + '/secrets.yml', 'utf8') || ''
 // const secrets = YAML.parse(file)
