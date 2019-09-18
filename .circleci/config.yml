@@ -40,7 +40,13 @@ workflows:
           account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
           repo: "${AWS_ECR_REPO_NAME}"
           region: ${AWS_REGION}
-          tag: "${CIRCLE_SHA1}"
+          tag: "${CIRCLE_SHA1}-${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}"
+          filters:
+            branches:
+                only:
+                  # only run on dev and master branches
+                  - dev
+                  - master
       # update an ECS service
       - aws-ecs/deploy-service-update:
           requires:
@@ -48,9 +54,10 @@ workflows:
           family: "${AWS_ECR_REPO_NAME}-task-definition"
           service-name: "${AWS_ECR_REPO_NAME}-service"
           cluster-name: "${AWS_ECR_REPO_NAME}"
-          container-image-name-updates: "container=${AWS_ECR_REPO_NAME},tag=${CIRCLE_SHA1}"
+          container-image-name-updates: "container=${AWS_ECR_REPO_NAME},tag=${CIRCLE_SHA1}-${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}"
           filters:
             branches:
                 only:
                   # only run on dev and master branches
+                  - dev
                   - master
