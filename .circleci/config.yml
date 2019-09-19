@@ -47,7 +47,7 @@ workflows:
             - aws-ecr/build_and_push_image
           # family: "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}-task-definition"
           family: "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}"
-          service-name: "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}-service"
+          service-name: "${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}"
           # cluster-name: "${AWS_ECR_REPO_NAME}-${CIRCLE_BRANCH}"
           container-image-name-updates: "container=${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH},tag=${CIRCLE_SHA1}-${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BRANCH}"
           # family: "${AWS_ECR_REPO_NAME}-task-definition"
